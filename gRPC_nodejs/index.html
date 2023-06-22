@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+   <html>
+   <head>
+     <title>User Management</title>
+   </head>
+   <body>
+     <h1>User Management</h1>
+     <form id="addUserForm">
+       <h2>Add User</h2>
+       <label for="name">Name:</label>
+       <input type="text" id="name" name="name" required><br><br>
+       <label for="email">Email:</label>
+       <input type="email" id="email" name="email" required><br><br>
+       <input type="submit" value="Add User">
+     </form>
+     <hr>
+     <div id="userList">
+       <h2>User List</h2>
+     </div>
+     <script>
+       const form = document.getElementById('addUserForm');
+       const nameInput = document.getElementById('name');
+       const emailInput = document.getElementById('email');
+       const userListDiv = document.getElementById('userList');
+
+       form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const name = nameInput.value;
+        const email = emailInput.value;
+
+        const express = require('express');
+        const bodyParser = require('body-parser');
+        const app = express();
+
+        // Middleware untuk mem-parsing body dari request yang memiliki Content-Type 'application/json'
+        app.use(bodyParser.json());
+
+        // Mendefinisikan route untuk API /api/addUser dengan method POST
+        app.post('/api/addUser', (req, res) => {
+          const { name, email } = req.body;
+          // Lakukan operasi untuk menyimpan data user ke database atau tempat penyimpanan lainnya
+          // Setelah itu, kirimkan response dengan data user yang berhasil disimpan
+          res.json({ name, email });
+        });
+
+        // Start server
+        app.listen(3500, () => {
+          console.log('Server is listening on port 3500');
+        });
+
+
+    //     fetch('http://127.0.0.1:3500/api/addUser', {
+    //    method: 'POST',
+    //    headers: {
+    //      'Content-Type': 'application/json'
+    //    },
+    //    body: JSON.stringify({ name, email })
+    //  })
+    //  .then(response => response.json())
+    //  .then(user => {
+    //    const userDiv = document.createElement('div');
+    //    userDiv.innerHTML = `<p><strong>${user.name}</strong> (${user.email})</p>`;
+    //    userListDiv.appendChild(userDiv);
+    //    nameInput.value = '';
+    //    emailInput.value = '';
+    //  });
+   });
+
+   fetch('http://127.0.0.1:3500/api/getUsers')
+     .then(response => response.json())
+     .then(users => {
+       users.forEach(user => {
+         const userDiv = document.createElement('div');
+         userDiv.innerHTML = `<p><strong>${user.name}</strong> (${user.email})</p>`;
+         userListDiv.appendChild(userDiv);
+       });
+     });
+  </script>
+</body>
+</html>

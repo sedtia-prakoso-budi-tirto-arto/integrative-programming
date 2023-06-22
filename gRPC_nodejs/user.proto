@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+message User {
+  int32 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+service UserService {
+  rpc AddUser (User) returns (UserResponse) {}
+  rpc GetUser (UserRequest) returns (UserResponse) {}
+  rpc UpdateUser (User) returns (UserResponse) {}
+  rpc DeleteUser (UserRequest) returns (UserResponse) {}
+}
+
+message UserRequest {
+  int32 id = 1;
+}
+
+message UserResponse {
+  bool success = 1;
+  User user = 2;
+  repeated User users = 3;
+}
